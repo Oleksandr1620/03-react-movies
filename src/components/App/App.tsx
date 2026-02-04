@@ -5,6 +5,7 @@ import css from "./App.module.css";
 import SearchBar from "../SearchBar/SearchBar";
 import MovieGrid from "../MovieGrid/MovieGrid";
 import Loader from "../Loader/Loader";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import MovieModal from "../MovieModal/MovieModal";
 
 import { fetchMovies } from "../../services/movieService";
@@ -13,12 +14,14 @@ import type { Movie } from "../../types/movie";
 export default function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
   const handleSearch = async (query: string) => {
     try {
       setLoading(true);
-      setMovies([]); // очищаємо попередній результат
+      setError(false);
+      setMovies([]);
 
       const data = await fetchMovies(query);
 
@@ -28,6 +31,7 @@ export default function App() {
 
       setMovies(data);
     } catch {
+      setError(true);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -42,7 +46,9 @@ export default function App() {
 
       {loading && <Loader />}
 
-      {movies.length > 0 && (
+      {error && <ErrorMessage />}
+
+      {!loading && !error && movies.length > 0 && (
         <MovieGrid movies={movies} onSelect={setSelectedMovie} />
       )}
 

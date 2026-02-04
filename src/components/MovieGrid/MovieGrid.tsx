@@ -7,7 +7,7 @@ interface MovieGridProps {
 }
 
 export default function MovieGrid({ movies, onSelect }: MovieGridProps) {
-  if (movies.length === 0) return null; // Галерея рендериться лише якщо є фільми
+  if (movies.length === 0) return null;
 
   return (
     <ul className={css.grid}>

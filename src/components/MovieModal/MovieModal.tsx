@@ -9,7 +9,6 @@ interface MovieModalProps {
 }
 
 export default function MovieModal({ movie, onClose }: MovieModalProps) {
-  // Закриття при ESC
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -18,24 +17,20 @@ export default function MovieModal({ movie, onClose }: MovieModalProps) {
     };
     window.addEventListener("keydown", handleEsc);
 
-    // Блокуємо скрол сторінки
     document.body.style.overflow = "hidden";
 
-    // Очистка при unmount
     return () => {
       window.removeEventListener("keydown", handleEsc);
       document.body.style.overflow = "";
     };
   }, [onClose]);
 
-  // Закриття при кліку на бекдроп
   const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       onClose();
     }
   };
 
-  // Портал для рендеру модалки поза DOM
   return createPortal(
     <div
       className={css.backdrop}
